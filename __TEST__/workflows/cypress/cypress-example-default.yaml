@@ -1,0 +1,36 @@
+apiVersion: testworkflows.testkube.io/v1
+kind: TestWorkFlow
+metadata:
+  # name of the Test Workflow
+  name: cypress-example-video-artifact-default # MANDATORY
+  labels:
+    core-tests: workflows
+    tool: cypress
+spec:
+  content:
+    git: # checking out from git repo
+      uri: https://github.com/bchmura-af/testkube
+      revision: develop
+      paths:
+      - /test/cypress/executor-tests/cypress-13
+  container: # container settings
+    resources: # resource settings (optional)
+      requests: # resource requests
+        cpu: 2
+        memory: 2Gi
+    workingDir: /data/repo/test/cypress/executor-tests/cypress-13
+  steps: # steps that will be executed by this Test Workflow
+  - name: Run tests
+    run:
+      image: cypress/included:13.6.4 # image used while running specific step
+      args: # arguments passed to the container
+      - --env
+      - NON_CYPRESS_ENV=NON_CYPRESS_ENV_value
+      - --config
+      - video=true
+    steps:
+    - name: Saving artifacts
+      workingDir: /data/repo/test/cypress/executor-tests/cypress-13/videos
+      artifacts:
+        paths:
+        - '**/*'

@@ -1,5 +1,5 @@
 apiVersion: testworkflows.testkube.io/v1
-kind: testworkflows.testkube.io/v1
+kind: TestWorkFlow
 metadata:
   # name of the Test Workflow
   name: postman-workflow-example # MANDATORY
