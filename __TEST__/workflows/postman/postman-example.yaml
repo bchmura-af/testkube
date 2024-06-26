@@ -1,0 +1,28 @@
+apiVersion: testworkflows.testkube.io/v1
+kind: testworkflows.testkube.io/v1
+metadata:
+  # name of the Test Workflow
+  name: postman-workflow-example # MANDATORY
+  labels:
+    example: postman
+spec:
+  content:
+    git: # checking out from git repo
+      uri: https://github.com/bchmura-af/testkube
+      revision: develop
+      paths:
+      - test/postman/executor-tests/postman-executor-smoke-without-envs.postman_collection.json      
+  container: # container settings
+    resources: # resource settings (optional)
+      requests: # resource requests
+        cpu: 256m
+        memory: 128Mi
+    workingDir: /data/repo/__TEST__/workflows/postman
+  steps: # steps that will be executed by this Test Workflow
+  - name: Run test
+    run:
+      image: postman/newman:6-alpine # image used while running specific step
+      args: # arguments passed to the container
+      - run
+      - postman-executor-smoke-without-envs.postman_collection.json
+      
