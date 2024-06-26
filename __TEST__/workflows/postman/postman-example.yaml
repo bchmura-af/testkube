@@ -17,7 +17,8 @@ spec:
       requests: # resource requests
         cpu: 256m
         memory: 128Mi
-    workingDir: /data/repo/__TEST__/workflows/postman
+#    workingDir: /data/repo/__TEST__/workflows/postman
+    workingDir: /data/repo/test/postman/executor-tests
   steps: # steps that will be executed by this Test Workflow
   - name: Run test
     run:
