@@ -35,10 +35,12 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8080/",
-					"protocol": "http",
+					"raw": "https://testkube.kubeshop.io/",
+					"protocol": "https",
 					"host": [
-						"localhost"
+						"testkube",
+						"kubeshop",
+						"io"
 					],
 					"path": [
 						""
