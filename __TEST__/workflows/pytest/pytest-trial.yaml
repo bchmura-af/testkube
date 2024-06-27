@@ -1,28 +1,35 @@
+kind: TestWorkflow
 apiVersion: testworkflows.testkube.io/v1
-kind: TestWorkFlow
 metadata:
-  # name of the Test Workflow
-  name: pytest-workflow-trial # MANDATORY
-  labels: # THIS IS ONLY TO HAVE IT EASY TO FIND / FILTER
+  name: pytest-workflow-trial
+  namespace: testkube
+  labels:
     core-tests: workflows
     tool: pytest
 spec:
   content:
-    git: # checking out from git repo
+    git:
       uri: https://github.com/bchmura-af/testkube
       revision: develop
       paths:
       - /__TEST__/workflows/pytest
-  container: # container settings
-    resources: # resource settings (optional)
-      requests: # resource requests
+
+  container:
+    workingDir: /data/repo/__TEST__/workflows/pytest
+    image: afbartoszchmura/testing:pytest-latest
+    resources:
+      requests:
         cpu: 256m
         memory: 128Mi
-    workingDir: /data/repo/__TEST__/workflows/pytest
-  steps: # steps that will be executed by this Test Workflow
-  - name: Run tests
-    run:
-      image: pytest-executor:latest # image used while running specific step
-      args: # arguments passed to the container
-      - pytest 
-      - passed_sample.py
+  job:
+    activeDeadlineSeconds: 300
+
+  steps:
+    # - name: Install stuff
+    #   image: python:3.8.17-alpine3.18
+    #   steps:
+    #   - name: Pip
+    #     shell: python3 -m pip install --no-cache-dir --upgrade pip; python3 -m pip install --no-cache-dir --upgrade pipenv; python3 -m pip install --no-cache-dir --upgrade requests; python3 -m pip install --no-cache-dir --upgrade pytest
+
+    - name: Run tests
+      shell: python3 -m pytest passed_sample.py
