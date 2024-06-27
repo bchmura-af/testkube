@@ -1,0 +1,28 @@
+apiVersion: testworkflows.testkube.io/v1
+kind: TestWorkFlow
+metadata:
+  # name of the Test Workflow
+  name: pytest-workflow-trial # MANDATORY
+  labels: # THIS IS ONLY TO HAVE IT EASY TO FIND / FILTER
+    core-tests: workflows
+    tool: pytest
+spec:
+  content:
+    git: # checking out from git repo
+      uri: https://github.com/bchmura-af/testkube
+      revision: develop
+      paths:
+      - /__TEST__/workflows/pytest
+  container: # container settings
+    resources: # resource settings (optional)
+      requests: # resource requests
+        cpu: 256m
+        memory: 128Mi
+    workingDir: /data/repo/__TEST__/workflows/pytest
+  steps: # steps that will be executed by this Test Workflow
+  - name: Run tests
+    run:
+      image: pytest-executor:latest # image used while running specific step
+      args: # arguments passed to the container
+      - pytest 
+      - passed_sample.py
